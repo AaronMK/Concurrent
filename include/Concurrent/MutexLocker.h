@@ -1,6 +1,8 @@
 #ifndef _ENGINE_MUTEX_LOCKER_H_
 #define _ENGINE_MUTEX_LOCKER_H_
 
+#include "Config.h"
+
 #include "Mutex.h"
 
 namespace Concurrent
@@ -12,7 +14,7 @@ namespace Concurrent
 	 *  The constructor will take give ownership of the Mutex to
 	 *  the current thread, and destructor will automatically release ownership.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS MutexLocker
+	class CONCURRENT_EXPORT MutexLocker
 	{
 	public:
 		MutexLocker(const MutexLocker&) = delete;

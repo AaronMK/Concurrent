@@ -12,7 +12,7 @@ namespace Concurrent
 	 *  A convenience class that that makes it easy to schedule and run a
 	 *  function as a trackable Task.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS FunctionTask : public Task
+	class CONCURRENT_EXPORT FunctionTask : public Task
 	{
 	public:
 		FunctionTask() = default;

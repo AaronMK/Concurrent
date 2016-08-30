@@ -21,7 +21,7 @@ namespace Concurrent
 	 * @see
 	 *  WriteLocker
 	 */
-	class CONCURRENT_DYNAMIC_CLASS RWLock : public RWLockPlatform
+	class CONCURRENT_EXPORT RWLock : public RWLockPlatform
 	{
 		friend class ReadLocker;
 		friend class WriteLocker;

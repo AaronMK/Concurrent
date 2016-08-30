@@ -9,7 +9,7 @@ namespace Concurrent
 	 * @brief
 	 *  Class for scope based read locking of an RWLock.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS ReadLocker
+	class CONCURRENT_EXPORT ReadLocker
 	{
 	public:
 		ReadLocker(const ReadLocker&) = delete;

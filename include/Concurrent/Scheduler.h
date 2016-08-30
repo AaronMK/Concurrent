@@ -20,7 +20,7 @@ namespace Concurrent
 	 *  the active schedulers, pulling the highest priority task from eachin turn.  Any
 	 *  tasks passed with the same priority will be run in the order they are submitted.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS Scheduler
+	class CONCURRENT_EXPORT Scheduler
 	{
 		friend class SchedulerInternal;
 		friend class Task;

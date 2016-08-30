@@ -13,7 +13,7 @@ namespace Concurrent
 	/**
 	 * @internal
 	 */
-	class CONCURRENT_DYNAMIC_CLASS TimerPlatform
+	class CONCURRENT_EXPORT TimerPlatform
 	{
 	public:
 		typedef std::chrono::milliseconds interval_t;

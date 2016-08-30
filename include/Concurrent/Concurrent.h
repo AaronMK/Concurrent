@@ -13,7 +13,7 @@ namespace Concurrent
 	 * @brief
 	 *  Returns the number of logical cores on the host system.
 	 */
-	CONCURRENT_DYNAMIC_FUNC_EXPORT unsigned int hardwareConcurrency();
+	CONCURRENT_EXPORT unsigned int hardwareConcurrency();
 }
 
 #endif // _CONCURRENT_H_

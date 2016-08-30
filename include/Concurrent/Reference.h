@@ -172,6 +172,12 @@ namespace Concurrent
 		 *  Just like a normal pointer, true if the reference is not nullptr.
 		 */
 		operator bool() const;
+
+		/**
+		 * @brief
+		 *  Returns the number of references to the managed object.
+		 */
+		long use_count() const;
 	};
 
 	/**
@@ -372,6 +378,12 @@ namespace Concurrent
 	Reference<T>::operator bool() const
 	{
 		return (bool)mPtr;
+	}
+
+	template<typename T>
+	long Reference<T>::use_count() const
+	{
+		return mPtr.use_count()
 	}
 
 	///////////////////////////////////////////////////////

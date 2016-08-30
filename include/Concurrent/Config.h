@@ -5,6 +5,12 @@
  * \def CONCURRENT_DYNAMIC_LIB
  * Define if being compiled as a dynamic library.
  */
+// #define CONCURRENT_DYNAMIC_LIB
+
+/**
+ * \def CONCURRENT_COMPILE
+ * This should be defined by compiler input when compiling the library.
+ */
 
 ////////////////////////////////////////////////////////////////////////////
 //////// Configuration End - Don't modify anything below this line. ////////
@@ -17,16 +23,12 @@
 #endif
 
 #if !defined(CONCURRENT_DYNAMIC_LIB)
-#	define CONCURRENT_DYNAMIC_FUNC_EXPORT
-#	define CONCURRENT_DYNAMIC_CLASS
-#	define CONCURRENT_DYNAMIC_FUNC_DECLARE
+#	define CONCURRENT_EXPORT
 #elif defined(_WIN32)
 #	if defined(CONCURRENT_COMPILE)
-#		define CONCURRENT_DYNAMIC_FUNC_EXPORT extern __declspec(dllexport)
-#		define CONCURRENT_DYNAMIC_CLASS __declspec(dllexport)
+#		define CONCURRENT_EXPORT __declspec(dllexport)
 #	else
-#		define CONCURRENT_DYNAMIC_FUNC_EXPORT extern
-#		define CONCURRENT_DYNAMIC_CLASS __declspec(dllimport)
+#		define CONCURRENT_EXPORT __declspec(dllimport)
 #	endif
 #endif
 

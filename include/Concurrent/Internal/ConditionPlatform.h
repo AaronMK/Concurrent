@@ -12,7 +12,7 @@ namespace Concurrent
 	/**
 	 * @internal
 	 */
-	class CONCURRENT_DYNAMIC_CLASS ConditionPlatform
+	class CONCURRENT_EXPORT ConditionPlatform
 	{
 	public:
 		Concurrency::event winEvent;

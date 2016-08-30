@@ -13,7 +13,7 @@ namespace Concurrent
 	/**
 	 * @internal
 	 */
-	class CONCURRENT_DYNAMIC_CLASS MutexPlatform
+	class CONCURRENT_EXPORT MutexPlatform
 	{
 	public:
 		MutexPlatform();

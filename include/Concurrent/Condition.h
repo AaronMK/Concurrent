@@ -17,7 +17,7 @@ namespace Concurrent
 	 *  calls will immediately return.  When in the reset state, wait() calls will
 	 *  block until the condition is destroyed or put in the triggered state.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS Condition : public ConditionPlatform
+	class CONCURRENT_EXPORT Condition : public ConditionPlatform
 	{
 	public:
 		Condition(const Condition&) = delete;

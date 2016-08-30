@@ -17,7 +17,7 @@ namespace Concurrent
 	 *
 	 *  See MutexLocker for scope based locking.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS Mutex : private MutexPlatform
+	class CONCURRENT_EXPORT Mutex : private MutexPlatform
 	{
 	public:
 		Mutex(const Mutex&) = delete;

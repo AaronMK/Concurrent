@@ -14,7 +14,7 @@ namespace Concurrent
 	 *  will be as accurate as the underlying concurrency framework allows.  TimerPlatform::interval_t
 	 *  is defined from the std::chrono namespace to reflect underlying precision. 
 	 */
-	class CONCURRENT_DYNAMIC_CLASS Timer : public TimerPlatform
+	class CONCURRENT_EXPORT Timer : public TimerPlatform
 	{
 	public:
 		Timer(const Timer&) = delete;

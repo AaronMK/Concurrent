@@ -13,7 +13,7 @@ namespace Concurrent
 	/**
 	 * @internal
 	 */
-	class CONCURRENT_DYNAMIC_CLASS TaskInternal
+	class CONCURRENT_EXPORT TaskInternal
 	{
 		friend class Task;
 		friend class Scheduler;

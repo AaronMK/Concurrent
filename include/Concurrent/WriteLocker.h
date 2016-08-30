@@ -9,7 +9,7 @@ namespace Concurrent
 	 * @brief
 	 *  Class for scope based write locking of an RWLock.
 	 */
-	class CONCURRENT_DYNAMIC_CLASS WriteLocker
+	class CONCURRENT_EXPORT WriteLocker
 	{
 	public:
 		WriteLocker(const WriteLocker&) = delete;

@@ -16,7 +16,7 @@ namespace Concurrent
 	 *  concurrent execution can be added as child tasks from within an implementation
 	 *  of main(); 
 	 */
-	class CONCURRENT_DYNAMIC_CLASS Task : public TaskInternal
+	class CONCURRENT_EXPORT Task : public TaskInternal
 	{
 		friend class SchedulerInternal;
 	public:
