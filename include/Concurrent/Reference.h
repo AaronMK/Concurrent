@@ -391,27 +391,23 @@ namespace Concurrent
 	template<typename T>
 	WeakRefBase<T>::WeakRefBase()
 	{
-
 	}
 
 	template<typename T>
 	WeakRefBase<T>::WeakRefBase(const std::weak_ptr<T> &ptr)
 		: mWeakPtr(ptr)
 	{
-
 	}
 
 	template<typename T>
 	WeakRefBase<T>::WeakRefBase(const std::shared_ptr<T> &ptr)
 		: mWeakPtr(ptr)
 	{
-
 	}
 
 	template<typename T>
 	WeakRefBase<T>::~WeakRefBase()
 	{
-
 	}
 
 	/////////////////////////////////////
@@ -420,14 +416,12 @@ namespace Concurrent
 	WeakRef<T>::WeakRef(const WeakRef<T> &other)
 		: WeakRefBase(other.mWeakPtr)
 	{
-
 	}
 
 	template<typename T>
 	WeakRef<T>::WeakRef(const Reference<T> &other)
 		: WeakRefBase(other.mPtr)
 	{
-
 	}
 
 	template<typename T>

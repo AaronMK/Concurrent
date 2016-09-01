@@ -58,7 +58,7 @@ namespace Concurrent
 		task->schedulerAcquire();
 		task->mScheduler = this;
 
-		addTask(std::bind(&TaskInternal::doRun, task), priority);
+		addTask(std::bind(&Task::doRun, task), priority);
 	}
 
 	Scheduler& Scheduler::operator=(Scheduler&& other)
