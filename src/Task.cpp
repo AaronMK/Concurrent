@@ -57,7 +57,7 @@ namespace Concurrent
 		Task* task = dynamic_cast<Task*>(this);
 
 		runningTask.set(task);
-		task->main();
+		task->run();
 		runningTask.set(nullptr);
 
 		task->schedulerRelease();
@@ -175,7 +175,7 @@ namespace Concurrent
 		schedulerAcquire();
 
 		sysRunAsThread([this, childTask]() {
-			childTask->main();
+			childTask->run();
 			schedulerRelease();
 		});
 

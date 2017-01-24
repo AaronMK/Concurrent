@@ -36,7 +36,7 @@ namespace Concurrent
 		 * @brief
 		 *  Overriden to call the function wrapped in the task.
 		 */
-		virtual void main() override;
+		virtual void run() override;
 
 	private:
 		std::function<void()> mFunc;

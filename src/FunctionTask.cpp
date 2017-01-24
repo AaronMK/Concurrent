@@ -18,7 +18,7 @@ namespace Concurrent
 		mFunc = std::forward<std::function<void()>>(func);
 	}
 
-	void FunctionTask::main()
+	void FunctionTask::run()
 	{
 		mFunc();
 	}

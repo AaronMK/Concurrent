@@ -14,7 +14,7 @@ namespace Concurrent
 	 *  Tasks are the basic unit of work items that are passed into the system threadpool
 	 *  via a Scheduler for execution.  They can be tracked, and subtasks for seperate
 	 *  concurrent execution can be added as child tasks from within an implementation
-	 *  of main(); 
+	 *  of run().
 	 */
 	class CONCURRENT_EXPORT Task : public TaskInternal
 	{
@@ -31,7 +31,7 @@ namespace Concurrent
 		 * @brief
 		 *  Override to determine what your task will do.
 		 */
-		virtual void main() = 0;
+		virtual void run() = 0;
 
 		/**
 		 * @brief
