@@ -1,15 +1,27 @@
 #include <Concurrent/WriteLocker.h>
 
+#ifdef _WIN32
+
 namespace Concurrent
 {
 	WriteLocker::WriteLocker(RWLock *lock)
-	: m_lock(lock)
+		: mLock(lock)
 	{
-		m_lock->lockWrite();
+		try
+		{
+			mLock->mPlatformLock.lock();
+		}
+		catch (Concurrency::improper_lock ex)
+		{
+			mLock = nullptr;
+		}
 	}
 
 	WriteLocker::~WriteLocker()
 	{
-		m_lock->unlock();
+		if (nullptr != mLock)
+			mLock->mPlatformLock.unlock();
 	}
 }
+
+#endif // _WIN32

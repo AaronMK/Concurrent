@@ -1,15 +1,27 @@
 #include <Concurrent/ReadLocker.h>
 
+#ifdef _WIN32
+
 namespace Concurrent
 {
 	ReadLocker::ReadLocker(RWLock *lock)
-	: m_lock(lock)
+		: mLock(lock)
 	{
-		m_lock->lockRead();
+		try
+		{
+			mLock->mPlatformLock.lock_read();
+		}
+		catch (Concurrency::improper_lock ex)
+		{
+			mLock = nullptr;
+		}
 	}
 
 	ReadLocker::~ReadLocker()
 	{
-		m_lock->unlock();
+		if (nullptr != mLock)
+			mLock->mPlatformLock.unlock();
 	}
 }
+
+#endif // _WIN32

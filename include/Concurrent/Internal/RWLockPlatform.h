@@ -13,7 +13,16 @@ namespace Concurrent
 	 */
 	class CONCURRENT_EXPORT RWLockPlatform
 	{
+
+		friend class ReadLocker;
+		friend class WriteLocker;
+
+	public:
+		virtual ~RWLockPlatform();
+
 	protected:
+		RWLockPlatform();
+		
 		Concurrency::reader_writer_lock mPlatformLock;
 	};
 }

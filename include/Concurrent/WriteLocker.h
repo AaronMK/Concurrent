@@ -28,7 +28,7 @@ namespace Concurrent
 		virtual ~WriteLocker();
 
 	private:
-		RWLock* m_lock;
+		RWLock* mLock;
 	};
 }
 

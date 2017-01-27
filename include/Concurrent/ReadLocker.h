@@ -28,7 +28,7 @@ namespace Concurrent
 		virtual ~ReadLocker();
 
 	private:
-		RWLock* m_lock;
+		RWLock* mLock;
 	};
 }
 
