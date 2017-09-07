@@ -2,7 +2,10 @@
 #define _CONCURRENT_RW_LOCK_H_
 
 #include "Config.h"
+
 #include "Internal/RWLockPlatform.h"
+
+#include "ThreadLocalPtr.h"
 
 namespace Concurrent
 {
@@ -16,10 +19,13 @@ namespace Concurrent
 	 *
 	 *  Recursive locking is supported with the following caveats:
 	 *
-	 *  - The recursive lock must have the same access as the lock already held by
-	 *    the thread.  For example, obtaining a recursive read lock will only work
-	 *    if the thread has a read lock, but not if it has a write lock.  Breaking
-	 *    this rule results in deadlock.
+	 *  - Read locks can always be obtained.  If a write lock is already held, thread
+	 *    will still have exclusive access and be considered in the write state.  If a
+	 *    read lock is already held, the read state will remain.
+	 *
+	 *  - Write locks can be obtained if the thread does not currently hold the lock
+	 *    or recursively over another write lock.  Trying to get a write lock when the
+	 *    thread already has a read lock will throw an exception.
 	 *
 	 *  - ReadLocker and WriteLocker objects must be destroyed in the reverse order
 	 *    in which they were created.  Failing to do so could result in premature
@@ -39,6 +45,17 @@ namespace Concurrent
 	public:
 		RWLock();
 		virtual ~RWLock();
+
+	private:
+
+		enum class ThreadState
+		{
+			None,
+			Read,
+			Write
+		};
+
+		ThreadLocal<ThreadState> mThreadState;
 	};
 }
 

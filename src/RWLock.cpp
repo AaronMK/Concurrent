@@ -20,6 +20,7 @@ namespace Concurrent
 	//////////////////////////////////////////
 
 	RWLock::RWLock()
+		: mThreadState(ThreadState::None)
 	{
 	}
 

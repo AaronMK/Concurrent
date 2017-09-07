@@ -28,6 +28,8 @@ namespace Concurrent
 		virtual ~ReadLocker();
 
 	private:
+		typedef RWLock::ThreadState LockState;
+
 		RWLock* mLock;
 	};
 }

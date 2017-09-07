@@ -76,6 +76,72 @@ namespace Concurrent
 #		endif
 	};
 
+	template<typename T>
+	class ThreadLocal
+	{
+	private:
+		ThreadLocalPtr<T> mPtr;
+		T mDefaultValue;
+
+		T* fetchPtr()
+		{
+			T* ret = mPtr.get();
+
+			if (nullptr == ret)
+			{
+				mPtr.set(new T(mDefaultValue));
+				return mPtr.get();
+			}
+
+			return ret;
+		}
+
+	public:
+		ThreadLocal()
+		{
+		}
+
+		ThreadLocal(const T& defaultValue)
+			: mDefaultValue(defaultValue)
+		{
+		}
+
+		ThreadLocal(T&& defaultValue)
+			: mDefaultValue(std::move(defaultValue))
+		{
+		}
+
+		T* get()
+		{
+			return fetchPtr();
+		}
+
+		const T* get() const
+		{
+			return const_cast<const T*>(fetchPtr());
+		}
+
+		T* operator->()
+		{
+			return get();
+		}
+
+		const T* operator->() const
+		{
+			return get();
+		}
+
+		T& operator*()
+		{
+			return *get();
+		}
+
+		const T& operator*() const
+		{
+			return *get();
+		}
+	};
+
 #if defined(_WIN32)
 	template<typename T>
 	ThreadLocalPtr<T>::ThreadLocalPtr()
