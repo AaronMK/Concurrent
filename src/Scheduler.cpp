@@ -6,7 +6,7 @@
 #include <Concurrent/Task.h>
 #include <Concurrent/ReadLocker.h>
 #include <Concurrent/WriteLocker.h>
-#include <Concurrent/ThreadLocalPtr.h>
+#include <Concurrent/ThreadLocal.h>
 
 #include "private_include/Platform.h"
 

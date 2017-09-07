@@ -1,7 +1,7 @@
 #include <Concurrent/Task.h>
 
 #include <Concurrent/Scheduler.h>
-#include <Concurrent/ThreadLocalPtr.h>
+#include <Concurrent/ThreadLocal.h>
 
 #include "private_include/Platform.h"
 

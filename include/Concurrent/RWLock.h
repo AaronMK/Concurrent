@@ -5,7 +5,7 @@
 
 #include "Internal/RWLockPlatform.h"
 
-#include "ThreadLocalPtr.h"
+#include "ThreadLocal.h"
 
 namespace Concurrent
 {
