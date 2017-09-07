@@ -185,7 +185,7 @@ namespace Concurrent
 #ifdef _WIN32
 	void Task::yield()
 	{
-		Concurrency::Context::CurrentContext()->Yield();
+		Concurrency::Context::CurrentContext()->YieldExecution();
 	}
 #else
 #	error Need to implement Task::yield() on current platform.
