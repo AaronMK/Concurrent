@@ -17,7 +17,7 @@ namespace Concurrent
 	 *  priorities.
 	 * 
 	 *  There can be multiple schedulers, and internally the system will round-robin all 
-	 *  the active schedulers, pulling the highest priority task from eachin turn.  Any
+	 *  the active schedulers, pulling the highest priority task from each in turn.  Any
 	 *  tasks passed with the same priority will be run in the order they are submitted.
 	 */
 	class CONCURRENT_EXPORT Scheduler

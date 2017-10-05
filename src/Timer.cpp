@@ -25,7 +25,7 @@ namespace Concurrent
 		static_assert(std::is_same<interval_t, std::chrono::milliseconds>::value,
 			"interval_t assumed to be milliseconds for current TimerPlatform::constructTimer() implementation.");
 
-		assert(nullptr == mTimer);
+		assert(false == mTimer.has_value());
 
 		// Highly unlikely, but check anyway.
 		assert(mInterval.count() <= std::numeric_limits<unsigned int>::max());
@@ -35,8 +35,7 @@ namespace Concurrent
 			t->mHandler();
 		});
 
-		new (&mTimerMemory[0])sysTimer_t((unsigned int)mInterval.count(), this, &funcCall, mRepeat);
-		mTimer = reinterpret_cast<sysTimer_t*>(&mTimerMemory[0]);
+		mTimer.emplace((unsigned int)mInterval.count(), this, &funcCall, mRepeat);
 	}
 
 	void TimerPlatform::clearTimer()
@@ -44,19 +43,15 @@ namespace Concurrent
 		if (mTimer)
 		{
 			mTimer->stop();
-
-			mTimer->~sysTimer_t();
-			mTimer = nullptr;
+			mTimer.reset();
 		}
 	}
 
 	/////////////////////////////////////////
 
-	Timer::Timer(std::function<void(void)>&& func, std::chrono::milliseconds interval)
+	Timer::Timer(std::function<void(void)>&& func, interval_t interval)
 		: Timer()
 	{
-		mTimer = nullptr;
-
 		mInterval = interval;
 		mHandler = std::forward<std::function<void(void)>>(func);
 	}
@@ -64,7 +59,6 @@ namespace Concurrent
 	Timer::Timer()
 	{
 		mRepeat = false;
-		mTimer = nullptr;
 		mInterval = interval_t(0);
 	}
 

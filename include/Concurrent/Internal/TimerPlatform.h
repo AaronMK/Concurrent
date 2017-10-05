@@ -6,7 +6,9 @@
 #ifdef _WIN32
 
 #include <agents.h>
+
 #include <chrono>
+#include <optional>
 
 namespace Concurrent
 {
@@ -23,10 +25,8 @@ namespace Concurrent
 		virtual ~TimerPlatform();
 
 		typedef Concurrency::timer<TimerPlatform*> sysTimer_t;
-		static const size_t sysTimerSize = sizeof(sysTimer_t);
 
-		sysTimer_t* mTimer;
-		unsigned char mTimerMemory[sysTimerSize];
+		std::optional<sysTimer_t> mTimer;
 
 		bool mRepeat;
 		std::function<void(void)> mHandler;
