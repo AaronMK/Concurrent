@@ -103,12 +103,12 @@ namespace Concurrent
 
 		if (priority < 0)
 		{
-			highPriorityQueue.push(std::forward<TaskRecord>(record));
+			highPriorityQueue.push(std::move(record));
 		}
 		else
 		{
 			priority = clamp<int>(priority, 0, (int)mTaskQueues.size() - 1);
-			mTaskQueues[priority].push(std::forward<TaskRecord>(record));
+			mTaskQueues[priority].push(std::move(record));
 		}
 
 		sysScheduleFunction(&SchedulerInternal::taskRunner, this);
