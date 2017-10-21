@@ -5,6 +5,8 @@
 
 #include "Internal/QueuePlatform.h"
 
+#include <optional>
+
 namespace Concurrent
 {
 	/**
