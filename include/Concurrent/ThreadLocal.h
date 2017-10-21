@@ -7,13 +7,17 @@ namespace Concurrent
 {
 	/**
 	 * @brief
-	 *  A pointer that can be set independently for each thread or task.
+	 *  A pointer that can be set independently for each thread.
 	 *
 	 *  This is a pointer that can be given a different value for each thread.  
 	 *  This class does no allocation or deletion of the object to which it points, it simply 
 	 *  stores the thread local value of the pointer.  This class should be used sparingly
 	 *  since the number of thread local pointers that can be registered per process is limited
 	 *  on some systems.
+	 *
+	 * @todo
+	 *  Determine what happens if a task is swapped out within a thread, like when waiting on a
+	 *  cooperative synchronization primitive.
 	 */
 	template<typename T>
 	class ThreadLocalPtr
@@ -34,13 +38,13 @@ namespace Concurrent
 
 		/**
 		 * @brief
-		 *  "Dereference" operator acts as if the thread local poiter were a normal pointer.
+		 *  "Dereference" operator acts as if the thread local pointer were a normal pointer.
 		 */
 		operator T*();
 
 		/**
 		 * @brief
-		 *  "Member" operator acts as if the thread local poiter were a normal pointer.
+		 *  "Member" operator acts as if the thread local pointer were a normal pointer.
 		 */
 		T* operator->();
 
