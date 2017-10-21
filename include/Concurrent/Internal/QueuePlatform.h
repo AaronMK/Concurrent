@@ -9,15 +9,8 @@
 
 namespace Concurrent
 {
-	/**
-	 * @internal
-	 */
 	template<typename T>
-	class QueuePlatform
-	{
-	protected:
-		concurrency::concurrent_queue<T> mSysQueue;
-	};
+	using QueuePlatform = concurrency::concurrent_queue<T>;
 }
 
 #endif
