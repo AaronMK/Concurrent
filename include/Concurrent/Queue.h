@@ -17,37 +17,7 @@ namespace Concurrent
 	class Queue
 	{
 	private:
-		QueuePlatform<std::optional<T>> mSysQueue;
-
-		template<bool canCopy>
-		void copyPush(const T& item);
-
-		template<>
-		void copyPush<true>(const T& item)
-		{
-			mSysQueue.push(std::make_optional<T>(item));
-		}
-		
-		template<>
-		void copyPush<false>(const T& item)
-		{
-			throw StdExt::invalid_operation("Attempting to copy a non-copyable object.")
-		}
-		
-		template<bool canMove>
-		void movePush(T&& item);
-
-		template<>
-		void movePush<true>(T&& item)
-		{
-			mSysQueue.push(std::make_optional<T>(std::move(item)));
-		}
-		
-		template<>
-		void movePush<false>(T&& item)
-		{
-			throw StdExt::invalid_operation("Attempting to move a non-movable object.")
-		}
+		QueuePlatform<T> mSysQueue;
 
 	public:
 
@@ -69,7 +39,7 @@ namespace Concurrent
 		 */
 		void push(const T& item)
 		{
-			copyPush<std::is_copy_constructible<T>::value>(item);
+			mSysQueue.push(item);
 		}
 
 		/**
@@ -78,7 +48,7 @@ namespace Concurrent
 		 */
 		void push(T&& item)
 		{
-			movePush<std::is_copy_constructible<T>::value>(std::move(item));
+			mSysQueue.push(std::move(item));
 		}
 
 		/**
@@ -89,14 +59,7 @@ namespace Concurrent
 		 */
 		bool tryPop(T& destination)
 		{
-			std::optional<T> temp;
-			if (mSysQueue.try_pop(temp))
-			{
-				destination = std::move(*temp);
-				return true;
-			}
-
-			return false;
+			return mSysQueue.try_pop(destination);
 		}
 
 		/**
