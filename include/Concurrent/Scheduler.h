@@ -37,7 +37,7 @@ namespace Concurrent
 		 *  of zero or less will create a scheduler that simply submits tasks to the
 		 *  system thread pool in the order received.
 		 */
-		Scheduler(int maxPriority);
+		Scheduler(int maxPriority = 0);
 		
 		/**
 		 * @brief
@@ -61,14 +61,14 @@ namespace Concurrent
 		 *  Adds a function for scheduling.  If the passed priority is
 		 *  greater than that of the scheduler, it will be clamped.
 		 */
-		void addTask(std::function<void()>&& func, int priority);
+		void addTask(std::function<void()>&& func, int priority = 0);
 
 		/**
 		 * @brief
 		 *  Adds a task for scheduling.  If the passed priority is
 		 *  greater than that of the scheduler, it will be clamped.
 		 */
-		void addTask(Task* task, int priority);
+		void addTask(Task* task, int priority = 0);
 
 		/**
 		 * @brief

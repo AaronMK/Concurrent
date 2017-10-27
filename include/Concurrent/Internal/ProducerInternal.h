@@ -22,7 +22,7 @@ namespace Concurrent
 		{
 			bool success;
 			Condition* wakeUp;
-			T* out;
+			std::optional<T> out;
 		};
 
 		std::atomic<bool> endCalled;
@@ -39,7 +39,7 @@ namespace Concurrent
 			WaitRecord* record;
 			if (false == messages.isEmpty() && waiting.tryPop(record))
 			{
-				messages.tryPop(*record->out);
+				messages.tryPop(record->out);
 				record->success = true;
 				record->wakeUp->trigger();
 			}
@@ -48,18 +48,18 @@ namespace Concurrent
 		void pushMessage(T&& item)
 		{
 			WriteLocker lock(&rwLock);
-			messages.push(std::forward<T>(item));
+			messages.push(std::move(item));
 
 			WaitRecord* record;
 			if (false == messages.isEmpty() && waiting.tryPop(record))
 			{
-				messages.tryPop(*record->out);
+				messages.tryPop(record->out);
 				record->success = true;
 				record->wakeUp->trigger();
 			}
 		}
 
-		bool getMessage(T &out, bool trying = false)
+		bool getMessage(std::optional<T>& out, bool trying = false)
 		{
 			Condition ready;
 			WaitRecord record;
@@ -72,13 +72,32 @@ namespace Concurrent
 					return false;
 
 				record.wakeUp = &ready;
-				record.out = &out;
 
 				waiting.push(&record);
 			}
 
 			ready.wait();
-			return record.success;
+
+			if (record.success)
+			{
+				out = std::move(record.out);
+				return true;
+			}
+
+			return false;
+		}
+
+		bool getMessage(T &out, bool trying = false)
+		{
+			std::optional opt;
+
+			if (getMessage(opt, trying))
+			{
+				out = std::move(*opt);
+				return true;
+			}
+
+			return false;
 		}
 
 		void end()

@@ -22,27 +22,53 @@ namespace Concurrent
 	public:
 		Producer(const Producer<T>&) = delete;
 
-		Producer(Producer&& other);
-		Producer();
+		Producer(Producer&& other)
+			: mInternal(other.mInternal)
+		{
+			other.mInternal.makeNull();
+		}
+
+		Producer()
+		{
+			mInternal = Reference< ProducerInternal<T> >::create();
+			mInternal->endCalled.store(false);
+		}
 
 		/**
 		 * @brief
 		 *  Destruction of the produder with an automatic end() call.  Any unconsumed items
 		 *  in the queue upon destruction will be deleted.
 		 */
-		virtual ~Producer();
+		virtual ~Producer()
+		{
+			mInternal->end();
+		}
 
 		/**
 		 * @brief
 		 *  Pushes a copy of the passed item into the message queue.
 		 */
-		bool push(const T &item);
+		bool push(const T &item)
+		{
+			if (mInternal->endCalled)
+				return false;
+
+			mInternal->pushMessage(item);
+			return true;
+		}
 
 		/**
 		 * @brief
 		 *  Pushes the passed item into the message queue using move semantics.
 		 */
-		bool push(T&& item);
+		bool push(T&& item)
+		{
+			if (mInternal->endCalled)
+				return false;
+
+			mInternal->pushMessage(std::forward<T>(item));
+			return true;
+		}
 
 		/**
 		 * @brief
@@ -53,20 +79,55 @@ namespace Concurrent
 		 *  True if an item was pulled from the internal queue and placed into out.
 		 *  False if end() was called and there are no items in the queue.
 		 */
-		bool consume(T& out);
+		bool consume(T& out)
+		{
+			Reference< ProducerInternal<T> > localInternal(mInternal);
+			return localInternal->getMessage(out);
+		}
+
+		/**
+		 * @brief
+		 *  Takes an item out of the queue and places it in out.  This call will block
+		 *  either until an item becomes available or until end is called.
+		 *
+		 * @return
+		 *  True if an item was pulled from the internal queue and placed into out.
+		 *  False if end() was called and there are no items in the queue.
+		 */
+		bool consume(std::optional<T>& out)
+		{
+			Reference< ProducerInternal<T> > localInternal(mInternal);
+			return localInternal->getMessage(out);
+		}
 
 		/**
 		 * @brief
 		 *  Pulls an item from the queue and puts into out and returns true, or
 		 *  returns false if there is none available.
 		 */
-		bool tryConsume(T& out);
+		bool tryConsume(T& out)
+		{
+			return mInternal->getMessage(out, true);
+		}
+
+		/**
+		 * @brief
+		 *  Pulls an item from the queue and puts into out and returns true, or
+		 *  returns false if there is none available.
+		 */
+		bool tryConsume(std::optional<T>& out)
+		{
+			return mInternal->getMessage(out, true);
+		}
 
 		/**
 		 * @brief
 		 *  Returns true if the queue is empty.
 		 */
-		bool isEmpty() const;
+		bool isEmpty() const
+		{
+			return mInternal->messages.isEmpty();
+		}
 
 		/**
 		 * @brief
@@ -76,78 +137,14 @@ namespace Concurrent
 		 *  in the queue have been consumed.  After that, consume() will
 		 *  return false.  Any subsequent push() calls will fail.
 		 */
-		void end();
+		void end()
+		{
+			mInternal->end();
+		}
 
 	private:
 		Reference< ProducerInternal<T> > mInternal;
 	};
-
-	///////////// Implementation /////////////////
-
-	template<typename T>
-	Producer<T>::Producer(Producer<T>&& other)
-		: mInternal(other.mInternal)
-	{
-		other.mInternal.makeNull();
-	}
-
-	template<typename T>
-	Producer<T>::Producer()
-	{
-		mInternal = Reference< ProducerInternal<T> >::create();
-		mInternal->endCalled.store(false);
-	}
-
-	template<typename T>
-	Producer<T>::~Producer()
-	{
-		mInternal->end();
-	}
-
-	template<typename T>
-	bool Producer<T>::push(const T &item)
-	{
-		if (mInternal->endCalled)
-			return false;
-
-		mInternal->pushMessage(item);
-		return true;
-	}
-
-	template<typename T>
-	bool Producer<T>::push(T&& item)
-	{
-		if (mInternal->endCalled)
-			return false;
-
-		mInternal->pushMessage(std::forward<T>(item));
-		return true;
-	}
-
-	template<typename T>
-	bool Producer<T>::consume(T& out)
-	{
-		Reference< ProducerInternal<T> > localInternal(mInternal);
-		return localInternal->getMessage(out);
-	}
-
-	template<typename T>
-	bool Producer<T>::tryConsume(T& out)
-	{
-		return mInternal->getMessage(out, true);
-	}
-
-	template<typename T>
-	bool Producer<T>::isEmpty() const
-	{
-		return mInternal->messages.isEmpty();
-	}
-
-	template<typename T>
-	void Producer<T>::end()
-	{
-		mInternal->end();
-	}
 }
 
 #endif // _CONCURRENT_PRODUCE_CONSUME_H_

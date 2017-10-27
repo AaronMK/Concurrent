@@ -126,6 +126,11 @@ namespace Concurrent
 
 			return false;
 		}
+
+		bool empty() const
+		{
+			return mQueue.empty();
+		}
 	};
 }
 
