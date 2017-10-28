@@ -14,10 +14,18 @@ namespace Concurrent
 	class RefBase
 	{
 	protected:
-		RefBase();
-		RefBase(const std::shared_ptr<T> &ptr);
+		RefBase()
+		{
+		}
 
-		virtual ~RefBase();
+		RefBase(const std::shared_ptr<T> &ptr)
+		{
+			std::atomic_exchange<T>(&mPtr, ptr);
+		}
+
+		virtual ~RefBase()
+		{
+		}
 
 		std::shared_ptr<T> mPtr;
 	};
@@ -26,11 +34,23 @@ namespace Concurrent
 	class WeakRefBase
 	{
 	protected:
-		WeakRefBase();
-		WeakRefBase(const std::weak_ptr<T> &ptr);
-		WeakRefBase(const std::shared_ptr<T> &ptr);
+		WeakRefBase()
+		{
+		}
 
-		virtual ~WeakRefBase();
+		WeakRefBase(const std::weak_ptr<T> &ptr)
+			: mWeakPtr(ptr)
+		{
+		}
+
+		WeakRefBase(const std::shared_ptr<T> &ptr)
+			: mWeakPtr(ptr)
+		{
+		}
+
+		virtual ~WeakRefBase()
+		{
+		}
 
 		std::weak_ptr<T> mWeakPtr;
 	};
