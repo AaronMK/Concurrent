@@ -89,7 +89,7 @@ namespace Concurrent
 
 		bool getMessage(T &out, bool trying = false)
 		{
-			std::optional opt;
+			std::optional<T> opt;
 
 			if (getMessage(opt, trying))
 			{
