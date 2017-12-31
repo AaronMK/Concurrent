@@ -9,6 +9,11 @@ namespace Concurrent
 	{
 	}
 
+	ReadLocker::ReadLocker(RWLock& lock)
+		: ReadLocker(&lock)
+	{
+	}
+
 	ReadLocker::~ReadLocker()
 	{
 	}

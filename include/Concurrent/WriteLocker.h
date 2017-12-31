@@ -20,6 +20,12 @@ namespace Concurrent
 		 *  Acquires the passed lock for writing, blocking until it has ownership.
 		 */
 		WriteLocker(RWLock *lock);
+
+		/**
+		 * @brief
+		 *  Acquires the passed lock for writing, blocking until it has ownership.
+		 */
+		WriteLocker(RWLock& lock);
 		
 		/**
 		 * @brief

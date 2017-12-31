@@ -20,6 +20,12 @@ namespace Concurrent
 		 *  Acquires the passed lock for reading, blocking until it is ready to read.
 		 */
 		ReadLocker(RWLock *lock);
+
+		/**
+		 * @brief
+		 *  Acquires the passed lock for reading, blocking until it is ready to read.
+		 */
+		ReadLocker(RWLock& lock);
 		
 		/**
 		 * @brief

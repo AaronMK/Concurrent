@@ -10,6 +10,11 @@ namespace Concurrent
 		: mLock(lock->mPlatformLock)
 	{
 	}
+	
+	WriteLocker::WriteLocker(RWLock& lock)
+		: WriteLocker(&lock)
+	{
+	}
 
 	WriteLocker::~WriteLocker()
 	{

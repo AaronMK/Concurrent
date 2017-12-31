@@ -1,7 +1,7 @@
 #ifndef _CONCURRENT_REFERENCE_H_
 #define _CONCURRENT_REFERENCE_H_
 
-#include "Internal/RefBase.h"
+#include <memory>
 
 namespace Concurrent
 {
@@ -17,10 +17,16 @@ namespace Concurrent
 	 *  of the Reference objects.
 	 */
 	template<typename T>
-	class Reference : public RefBase<T>
+	class Reference
 	{
 		template<typename U>
 		friend class Reference;
+
+		template<typename U>
+		friend class WeakRef;
+
+	private:
+		std::shared_ptr<T> mPtr;
 
 	public:
 
@@ -45,7 +51,7 @@ namespace Concurrent
 		 *  the reference counting system.
 		 */
 		Reference(T* item = nullptr)
-			: RefBase(std::shared_ptr<T>(item))
+			: mPtr(item)
 		{
 		}
 
@@ -55,8 +61,8 @@ namespace Concurrent
 		 *  the reference count.
 		 */
 		Reference(const Reference<T> &Other)
-			: RefBase(Other.mPtr)
 		{
+			std::atomic_exchange<T>(&mPtr, Other.mPtr);
 		}
 
 		/**
@@ -64,7 +70,7 @@ namespace Concurrent
 		 *  Creates a strong reference from a weak one.
 		 */
 		Reference(const WeakRef<T> &Other)
-			: RefBase(Other.mWeakPtr.lock())
+			: mPtr(Other.mWeakPtr.lock())
 		{
 		}
 
@@ -260,6 +266,15 @@ namespace Concurrent
 
 		/**
 		 * @brief
+		 *  Conversion to standard shared_ptr.
+		 */
+		operator std::shared_ptr<T>() const
+		{
+			return mPtr;
+		}
+
+		/**
+		 * @brief
 		 *  Returns the number of references to the managed object.
 		 */
 		long use_count() const
@@ -269,7 +284,7 @@ namespace Concurrent
 
 		size_t hash() const
 		{
-			return std::hash(mPtr);
+			return std::hash<std::shared_ptr<T>>{}(mPtr);
 		}
 	};
 
@@ -282,23 +297,33 @@ namespace Concurrent
 	 *  access to the object.
 	 */
 	template<typename T>
-	class WeakRef : public WeakRefBase<T>
+	class WeakRef
 	{
+		template<typename U>
+		friend class Reference;
+
+	private:
+		std::weak_ptr<T> mWeakPtr;
+
 	public:
+		WeakRef()
+		{
+		}
+
 		WeakRef(const WeakRef<T> &other)
-			: WeakRefBase(other.mWeakPtr)
+			: mWeakPtr(other.mWeakPtr)
 		{
 		}
 
 		WeakRef(const Reference<T> &other)
-			: WeakRefBase(other.mPtr)
+			: mWeakPtr(other.mPtr)
 		{
 		}
 
 		/**
 		 * @brief
 		 *  Creates a strong reference that will prevent destruction of the referenced object
-		 *  if it still exists, or returns a nullptr reference if it has been destryed.
+		 *  if it still exists, or returns a nullptr reference if it has been destroyed.
 		 */
 		Reference<T> lock() const
 		{
