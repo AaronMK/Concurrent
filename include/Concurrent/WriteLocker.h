@@ -28,9 +28,9 @@ namespace Concurrent
 		virtual ~WriteLocker();
 
 	private:
-		typedef RWLock::ThreadState LockState;
-
-		RWLock* mLock;
+		#ifdef _WIN32
+		Concurrency::reader_writer_lock::scoped_lock mLock;
+		#endif
 	};
 }
 

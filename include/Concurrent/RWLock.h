@@ -45,17 +45,6 @@ namespace Concurrent
 	public:
 		RWLock();
 		virtual ~RWLock();
-
-	private:
-
-		enum class ThreadState
-		{
-			None,
-			Read,
-			Write
-		};
-
-		ThreadLocal<ThreadState> mThreadState;
 	};
 }
 

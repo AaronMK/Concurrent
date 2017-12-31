@@ -266,6 +266,11 @@ namespace Concurrent
 		{
 			return mPtr.use_count()
 		}
+
+		size_t hash() const
+		{
+			return std::hash(mPtr);
+		}
 	};
 
 	/**
@@ -298,6 +303,18 @@ namespace Concurrent
 		Reference<T> lock() const
 		{
 			return Reference<T>(*this);
+		}
+	};
+}
+
+namespace std
+{
+	template<typename T>
+	struct hash<Concurrent::Reference<T>>
+	{
+		size_t operator()(const Concurrent::Reference<T>& ref) const noexcept
+		{
+			return ref.hash();
 		}
 	};
 }
