@@ -10,7 +10,7 @@ namespace Concurrent
 	}
 
 	ReadLocker::ReadLocker(RWLock& lock)
-		: ReadLocker(&lock)
+		: mLock(lock.mPlatformLock)
 	{
 	}
 

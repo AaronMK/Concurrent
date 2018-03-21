@@ -5,6 +5,8 @@
 
 #include "Internal/TaskInternal.h"
 
+#include <chrono>
+
 namespace Concurrent
 {
 	/**
@@ -70,6 +72,12 @@ namespace Concurrent
 		 *  Waits for all tasks to complete.
 		 */
 		static void waitForAll(Task** tArray, size_t numTasks);
+
+		/**
+		 * @brief
+		 *  Pauses the current task for at least the passed amount of time.
+		 */
+		static void sleep(std::chrono::milliseconds amtTime);
 
 	protected:
 

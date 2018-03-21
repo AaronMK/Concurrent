@@ -45,12 +45,16 @@ namespace Concurrent
 			return ret;
 		}
 
+		Reference()
+		{
+		}
+
 		/**
 		 * @brief
 		 *  Creates a reference to the passed object.  The object will now be managed by
 		 *  the reference counting system.
 		 */
-		Reference(T* item = nullptr)
+		Reference(T* item)
 			: mPtr(item)
 		{
 		}
@@ -328,6 +332,11 @@ namespace Concurrent
 		Reference<T> lock() const
 		{
 			return Reference<T>(*this);
+		}
+
+		bool expired() const
+		{
+			return mWeakPtr.expired();
 		}
 	};
 }

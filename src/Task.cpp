@@ -187,8 +187,13 @@ namespace Concurrent
 	{
 		Concurrency::Context::CurrentContext()->YieldExecution();
 	}
+
+	void Task::sleep(std::chrono::milliseconds amtTime)
+	{
+		Concurrency::wait(amtTime.count());
+	}
 #else
-#	error Need to implement Task::yield() on current platform.
+#	error Need to implement Task::yield() and sleep() on current platform.
 #endif
 
 }
