@@ -190,7 +190,7 @@ namespace Concurrent
 
 	void Task::sleep(std::chrono::milliseconds amtTime)
 	{
-		Concurrency::wait(amtTime.count());
+		Concurrency::wait((unsigned int)amtTime.count());
 	}
 #else
 #	error Need to implement Task::yield() and sleep() on current platform.
