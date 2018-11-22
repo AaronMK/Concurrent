@@ -100,6 +100,18 @@ namespace Concurrent
 		 */
 		static void runInline(Task* task);
 
+		/**
+		 * @brief
+		 *  Runs the task on the default scheduler with a default priority.
+		 */
+		static void runAsync(Task* task);
+		
+		/**
+		 * @brief
+		 *  Runs the function on the default scheduler with a default priority.
+		 */
+		static void runAsync(std::function<void()>&& func);
+
 	private:
 		Reference<SchedulerInternal> mInternal;
 	};

@@ -10,7 +10,7 @@ namespace Concurrent
 
 	/**
 	 * @brief
-	 *  Holds a reference counted pointer to an object.
+	 *  Holds a reference counted pointer to an object that is ABA safe.
 	 * 
 	 *  Operators make this act like normal pointers.  get() can be used to obtain the actual pointer.
 	 *  It wraps an implementation that is thread-safe for all provided functionality

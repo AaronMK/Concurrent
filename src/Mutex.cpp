@@ -33,7 +33,7 @@ namespace Concurrent
 		{
 			cs.lock();
 		}
-		catch ( Concurrency::improper_lock ex )
+		catch (const Concurrency::improper_lock& ex)
 		{
 		}
 
