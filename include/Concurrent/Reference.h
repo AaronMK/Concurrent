@@ -228,7 +228,7 @@ namespace Concurrent
 	Reference<T> Reference<T>::create(Args&& ...arguments)
 	{
 		Reference<T> ret;
-		ret.mPtr = std::make_shared<T>(arguments...);
+		ret.mPtr = std::make_shared<T>(std::forward<Args>(arguments)...);
 
 		return ret;
 	}
