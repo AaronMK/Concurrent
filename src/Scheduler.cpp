@@ -1,14 +1,14 @@
 #include <Concurrent/Scheduler.h>
 
-#include <thread>
-#include <algorithm>
-
 #include <Concurrent/Task.h>
 #include <Concurrent/ReadLocker.h>
 #include <Concurrent/WriteLocker.h>
 #include <Concurrent/ThreadLocal.h>
 
 #include "private_include/Platform.h"
+
+#include <thread>
+#include <algorithm>
 
 namespace Concurrent
 {
@@ -84,6 +84,16 @@ namespace Concurrent
 
 		task->doRun();
 		task->wait();
+	}
+
+	void Scheduler::runAsync(Task* task)
+	{
+		default()->addTask(task, 0);
+	}
+
+	void Scheduler::runAsync(std::function<void()>&& func)
+	{
+		default()->addTask(std::move(func), 0);
 	}
 
 	/////////////////////////////////////////////////

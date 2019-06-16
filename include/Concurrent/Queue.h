@@ -39,7 +39,10 @@ namespace Concurrent
 		 */
 		void push(const T& item)
 		{
-			mSysQueue.push(item);
+			if constexpr (std::is_copy_constructible<T>::value)
+				mSysQueue.push(item);
+			else
+				static_assert(false, "Attempting to copy an item that is not copy-constructable into a queue.");
 		}
 
 		/**
@@ -48,7 +51,10 @@ namespace Concurrent
 		 */
 		void push(T&& item)
 		{
-			mSysQueue.push(std::move(item));
+			if constexpr (std::is_move_constructible<T>::value)
+				mSysQueue.push(std::move(item));
+			else
+				static_assert(false, "Attempting to move an item that is not move-constructable into a queue.");
 		}
 
 		/**
