@@ -3,6 +3,8 @@
 #include <Concurrent/Scheduler.h>
 #include <Concurrent/ThreadLocal.h>
 
+#include <StdExt/Memory.h>
+
 #include "private_include/Platform.h"
 
 #include <cassert>
@@ -62,16 +64,15 @@ namespace Concurrent
 
 		task->schedulerRelease();
 	}
-
 	
 	size_t TaskInternal::waitForMultiple(Task** tArray, size_t numTasks, bool all)
 	{
-		Concurrency::event** winEvents = (Concurrency::event**)alloca(sizeof(Concurrency::event*)*numTasks);
+		StdExt::StackArray<Concurrency::event*, 32> winEvents(numTasks);
 
 		for(size_t i = 0; i < numTasks; i++)
 			winEvents[i] = &(tArray[i]->mFinishedHandle.winEvent);
 
-		return Concurrency::event::wait_for_multiple(winEvents, numTasks, all);
+		return Concurrency::event::wait_for_multiple(&winEvents[0], numTasks, all);
 	}
 
 	///////////////////////////////////////

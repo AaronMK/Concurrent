@@ -5,6 +5,7 @@
 #include "../Queue.h"
 
 #include <atomic>
+#include <memory>
 #include <vector>
 #include <memory>
 #include <functional>
@@ -29,25 +30,26 @@ namespace Concurrent
 			std::shared_ptr<SchedulerInternal> ref;
 			Task* parentTask;
 
-			TaskRecord()
+			TaskRecord() noexcept
 			{
 				parentTask = nullptr;
 			}
 
-			TaskRecord(const TaskRecord &other)
+			TaskRecord(const TaskRecord &other) noexcept
+				: TaskRecord()
 			{
 				// This should never be called, but is here for compatibility with Queues.
 				assert(false);
 			}
 
-			TaskRecord(TaskRecord&& other)
+			TaskRecord(TaskRecord&& other) noexcept
 			{
 				ref = other.ref;
 				func = std::move(other.func);
 				parentTask = other.parentTask;
 			}
 
-			TaskRecord& operator=(TaskRecord&& other)
+			TaskRecord& operator=(TaskRecord&& other) noexcept
 			{
 				ref = other.ref;
 				func = std::move(other.func);
