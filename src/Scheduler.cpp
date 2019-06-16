@@ -10,6 +10,8 @@
 #include <thread>
 #include <algorithm>
 
+using namespace std;
+
 namespace Concurrent
 {
 	static void ScheduleTaskRunner(Scheduler* scheduler)
@@ -32,7 +34,7 @@ namespace Concurrent
 		if (maxPriority < 0)
 			maxPriority = 0;
 
-		mInternal = Reference<SchedulerInternal>::create(maxPriority);
+		mInternal = make_shared<SchedulerInternal>(maxPriority);
 	}
 
 	Scheduler::Scheduler(Scheduler&& other)
@@ -67,7 +69,7 @@ namespace Concurrent
 		return *this;
 	}
 
-	Scheduler* Scheduler::default()
+	Scheduler* Scheduler::getDefault()
 	{
 		return &defaultScheduler;
 	}
@@ -88,12 +90,12 @@ namespace Concurrent
 
 	void Scheduler::runAsync(Task* task)
 	{
-		default()->addTask(task, 0);
+		getDefault()->addTask(task, 0);
 	}
 
 	void Scheduler::runAsync(std::function<void()>&& func)
 	{
-		default()->addTask(std::move(func), 0);
+		getDefault()->addTask(std::move(func), 0);
 	}
 
 	/////////////////////////////////////////////////

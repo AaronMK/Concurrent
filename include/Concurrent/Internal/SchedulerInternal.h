@@ -6,6 +6,7 @@
 
 #include <atomic>
 #include <vector>
+#include <memory>
 #include <functional>
 #include <cassert>
 
@@ -25,7 +26,7 @@ namespace Concurrent
 		struct TaskRecord
 		{
 			std::function<void()> func;
-			Reference<SchedulerInternal> ref;
+			std::shared_ptr<SchedulerInternal> ref;
 			Task* parentTask;
 
 			TaskRecord()

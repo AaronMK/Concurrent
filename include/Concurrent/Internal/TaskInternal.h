@@ -2,7 +2,6 @@
 #define _CONCURRENT_TASK_INTERNAL_H_
 
 #include "../Condition.h"
-#include "../Reference.h"
 
 #include "SchedulerInternal.h"
 

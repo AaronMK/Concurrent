@@ -2,9 +2,10 @@
 #define _CONCURRENT_SCHEDULER_H_
 
 #include "Config.h"
-#include "Reference.h"
 
 #include "Internal/SchedulerInternal.h"
+
+#include <memory>
 
 namespace Concurrent
 {
@@ -85,7 +86,7 @@ namespace Concurrent
 		 *  This is also the scheduler that is used when a task run 
 		 *  as a thread creates a subtask.
 		 */
-		static Scheduler* default();
+		static Scheduler* getDefault();
 
 		/**
 		 * @brief
@@ -113,7 +114,7 @@ namespace Concurrent
 		static void runAsync(std::function<void()>&& func);
 
 	private:
-		Reference<SchedulerInternal> mInternal;
+		std::shared_ptr<SchedulerInternal> mInternal;
 	};
 }
 

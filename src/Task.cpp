@@ -121,7 +121,7 @@ namespace Concurrent
 		schedulerAcquire();
 
 		SchedulerInternal::TaskRecord record;
-		Scheduler* scheduler = (mScheduler) ? mScheduler : Scheduler::default();
+		Scheduler* scheduler = (mScheduler) ? mScheduler : Scheduler::getDefault();
 
 		record.func = std::forward<std::function<void()>>(func);
 		record.ref = scheduler->mInternal;
@@ -156,7 +156,7 @@ namespace Concurrent
 		schedulerAcquire();
 
 		SchedulerInternal::TaskRecord record;
-		Scheduler* scheduler = (mScheduler) ? mScheduler : Scheduler::default();
+		Scheduler* scheduler = (mScheduler) ? mScheduler : Scheduler::getDefault();
 		
 		childTask->mParent = this;
 		childTask->mScheduler = scheduler;
