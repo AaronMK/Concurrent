@@ -23,7 +23,7 @@ namespace Concurrent
 		/**
 		 * @brief
 		 *  Constructs a timer with the passed callback and interval.  start() or oneShot()
-		 *  must be called to active it.
+		 *  must be called to activate it.
 		 */
 		Timer(std::function<void(void)>&& func, interval_t interval);
 		

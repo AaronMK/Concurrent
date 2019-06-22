@@ -24,7 +24,7 @@ namespace Concurrent
 		TimerPlatform();
 		virtual ~TimerPlatform();
 
-		typedef Concurrency::timer<TimerPlatform*> sysTimer_t;
+		using sysTimer_t = Concurrency::timer<TimerPlatform*>;
 
 		std::optional<sysTimer_t> mTimer;
 
