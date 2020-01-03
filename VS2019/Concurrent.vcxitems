@@ -22,7 +22,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\MutexPlatform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\ProducerInternal.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\QueuePlatform.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\RefBase.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\RWLockPlatform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\SchedulerInternal.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Concurrent\Internal\TaskInternal.h" />
