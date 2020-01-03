@@ -3,8 +3,6 @@
 
 #include "Internal/ProducerInternal.h"
 
-#include "Reference.h"
-
 namespace Concurrent
 {
 	/**
@@ -30,7 +28,7 @@ namespace Concurrent
 
 		Producer()
 		{
-			mInternal = Reference< ProducerInternal<T> >::create();
+			mInternal = std::make_shared< ProducerInternal<T> >();
 			mInternal->endCalled.store(false);
 		}
 
@@ -81,7 +79,7 @@ namespace Concurrent
 		 */
 		bool consume(T& out)
 		{
-			Reference< ProducerInternal<T> > localInternal(mInternal);
+			std::shared_ptr< ProducerInternal<T> > localInternal(mInternal);
 			return localInternal->getMessage(out);
 		}
 
@@ -96,7 +94,7 @@ namespace Concurrent
 		 */
 		bool consume(std::optional<T>& out)
 		{
-			Reference< ProducerInternal<T> > localInternal(mInternal);
+			std::shared_ptr< ProducerInternal<T> > localInternal(mInternal);
 			return localInternal->getMessage(out);
 		}
 
@@ -143,7 +141,7 @@ namespace Concurrent
 		}
 
 	private:
-		Reference< ProducerInternal<T> > mInternal;
+		std::shared_ptr< ProducerInternal<T> > mInternal;
 	};
 }
 
