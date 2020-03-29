@@ -70,17 +70,6 @@ namespace Concurrent
 
 		/**
 		 * @brief
-		 *  Attempts to pop an item from the Queue, if there is something to
-		 *  de-queue, it is placed in destination and true is returned.
-		 *  Otherwise, destination remains unchanged and false is returned.
-		 */
-		bool tryPop(std::optional<T>& destination)
-		{
-			return mSysQueue.try_pop(destination);
-		}
-
-		/**
-		 * @brief
 		 *  Inspector to determine if the queue is empty.
 		 */
 		bool isEmpty() const
