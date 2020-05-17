@@ -13,21 +13,32 @@
 #include <atomic>
 #include <thread>
 #include <vector>
+#include <iterator>
 #include <functional>
 #include <initializer_list>
+
+#include <StdExt/Type.h>
 
 namespace Concurrent
 {
 	template<typename msg_t>
 	class MessageLoop
 	{
+		static_assert(
+			!(
+				StdExt::Traits<msg_t>::is_reference || StdExt::Traits<msg_t>::is_move_reference ||
+				(StdExt::Traits<msg_t>::is_const && !StdExt::Traits<msg_t>::is_pointer)
+			),
+			"Reference or constant types are not allowed as a Queue type."
+		);
+
 	private:
 		FunctionTask mLoopTask;
 		Condition mHandleMessages;
-
 		std::atomic<bool> mContinue;
 
-		using varient_t = std::variant<msg_t, Condition*>; 
+		using traits_t = StdExt::Traits<msg_t>;
+		using varient_t = std::variant<msg_t, Condition*>;
 
 		Queue<varient_t> mQueue;
 
@@ -41,7 +52,7 @@ namespace Concurrent
 				mHandleMessages.reset();
 
 				varient_t currentMessage;
-				while (mQueue.tryPop(currentMessage))
+				while (mQueue.tryPop(&currentMessage))
 				{
 					if (std::holds_alternative<msg_t>(currentMessage))
 						handleMessage(std::get<msg_t>(currentMessage));
@@ -65,6 +76,8 @@ namespace Concurrent
 		}
 
 	protected:
+
+		using handle_message_t = typename traits_t::arg_non_copy_t;
 		
 		/**
 		 * @brief
@@ -75,13 +88,19 @@ namespace Concurrent
 		{
 		}
 
+		/**
+		 * @brief
+		 *  Method called to finalize the message loop after stop is called and the
+		 *  last message is processed.
+		 */
 		virtual void finalize()
 		{
 		}
 
-		virtual void handleMessage(msg_t msg) = 0;
+		virtual void handleMessage(handle_message_t msg) = 0;
 
 	public:
+
 		MessageLoop()
 		{
 		}
@@ -118,7 +137,9 @@ namespace Concurrent
 		void fence(Condition* signal)
 		{
 			signal->reset();
-			mQueue.push(varient_t(signal));
+			mQueue.push(signal);
+
+			mHandleMessages.trigger();
 		}
 
 		/**
@@ -131,82 +152,41 @@ namespace Concurrent
 			Condition signal;
 
 			mQueue.push(varient_t(&signal));
+			mHandleMessages.trigger();
+
 			signal.wait();
 		}
 
-		void push(const msg_t& msg, Condition* signal = nullptr)
+		/**
+		 * @brief
+		 *  Pushes an item onto the Queue.
+		 */
+		void push(const msg_t& item)
 		{
-			mQueue.push(msg);
-
-			if (signal)
-				fence(signal);
-
+			mQueue.push(varient_t(item));
 			mHandleMessages.trigger();
 		}
 
-		void push(msg_t&& msg, Condition* signal = nullptr)
+		/**
+		 * @brief
+		 *  Pushes an item onto the Queue.
+		 */
+		void push(msg_t&& item)
 		{
-			mQueue.push(std::move(msg));
-
-			if (signal)
-				fence(signal);
-
+			mQueue.push(varient_t(std::move(item)));
 			mHandleMessages.trigger();
 		}
 
-		template<size_t size>
-		void push(const std::array<msg_t, size>& list, Condition* signal = nullptr)
+		template<typename iterator>
+		void push_items(iterator begin, iterator end, Condition* signal = nullptr)
 		{
-			for(const msg_t& msg : list)
-				mQueue.push(msg);
+			for (iterator itr = begin; itr != end; ++itr)
+				mQueue.push(*itr);
 
 			if (signal)
-				fence(signal);
+				mQueue.push(signal);
 
 			mHandleMessages.trigger();
-		}
-		
-		template<size_t size>
-		void push(std::array<msg_t, size>&& list, Condition* signal = nullptr)
-		{
-			for(size_t i = 0; i < list.size(); ++i)
-				mQueue.push(std::move(list[i]));
-
-			mHandleMessages.trigger();
-		}
-
-		void push(const std::initializer_list<msg_t>& list, Condition* signal = nullptr)
-		{
-			for(const msg_t& msg : list)
-				mQueue.push(msg);
-
-			if (signal)
-				fence(signal);
-
-			mHandleMessages.trigger();
-		}
-
-		void push(const std::vector<msg_t> list, Condition* signal = nullptr)
-		{
-			for(const msg_t& msg : list)
-				mQueue.push(msg);
-
-			if (signal)
-				fence(signal);
-
-			mHandleMessages.trigger();
-		}
-
-		void push(std::vector<msg_t>&& list, Condition* signal = nullptr)
-		{
-			for(size_t i = 0; i < list.size(); ++i)
-				mQueue.push(std::move(list[i]));
-
-			if (signal)
-				fence(signal);
-
-			mHandleMessages.trigger();
-			list.clear();
 		}
 	};
 }
